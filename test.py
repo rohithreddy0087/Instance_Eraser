@@ -1,46 +1,49 @@
 from __future__ import print_function
-import argparse
 import os
 
 import torch
 import torchvision.transforms as transforms
 
-from utils import is_image_file, load_img, save_img
+import numpy as np
+from PIL import Image
 
-# Testing settings
-parser = argparse.ArgumentParser(description='pix2pix-pytorch-implementation')
-parser.add_argument('--dataset', required=True, help='facades')
-parser.add_argument('--direction', type=str, default='b2a', help='a2b or b2a')
-parser.add_argument('--nepochs', type=int, default=200, help='saved model of which epochs')
-parser.add_argument('--cuda', action='store_true', help='use cuda')
-opt = parser.parse_args()
-print(opt)
 
-device = torch.device("cuda:0" if opt.cuda else "cpu")
+def is_image_file(filename):
+    return any(filename.endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
 
-model_path = "checkpoint/{}/netG_model_epoch_{}.pth".format(opt.dataset, opt.nepochs)
 
-net_g = torch.load(model_path).to(device)
+def load_img(filepath):
+    img = Image.open(filepath).convert('RGB')
+    img = img.resize((256, 256), Image.BICUBIC)
+    return img
 
-if opt.direction == "a2b":
-    image_dir = "dataset/{}/test/a/".format(opt.dataset)
-else:
-    image_dir = "dataset/{}/test/b/".format(opt.dataset)
 
-image_filenames = [x for x in os.listdir(image_dir) if is_image_file(x)]
+def save_img(image_tensor, filename):
+    image_numpy = image_tensor.float().numpy()
+    image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0
+    image_numpy = image_numpy.clip(0, 255)
+    image_numpy = image_numpy.astype(np.uint8)
+    image_pil = Image.fromarray(image_numpy)
+    image_pil.save(filename)
+    print("Image saved as {}".format(filename))
 
-transform_list = [transforms.ToTensor(),
-                  transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+class Args:
+    cuda = True
 
-transform = transforms.Compose(transform_list)
-
-for image_name in image_filenames:
-    img = load_img(image_dir + image_name)
-    img = transform(img)
-    input = img.unsqueeze(0).to(device)
-    out = net_g(input)
-    out_img = out.detach().squeeze(0).cpu()
-
-    if not os.path.exists(os.path.join("result", opt.dataset)):
-        os.makedirs(os.path.join("result", opt.dataset))
-    save_img(out_img, "result/{}/{}".format(opt.dataset, image_name))
+if __name__ == "__main__":
+    opt = Args()
+    device = torch.device("cuda:0" if opt.cuda else "cpu")
+    image_dir = "test_images/"
+    model_path = "checkpoints/netG_model_epoch_1.pth"
+    net_g = torch.load(model_path).to(device)
+    image_filenames = [x for x in os.listdir(image_dir) if is_image_file(x)]
+    transform_list = [transforms.ToTensor(),
+                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+    transform = transforms.Compose(transform_list)
+    for image_name in image_filenames:
+        img = load_img(image_dir + image_name)
+        img = transform(img)
+        input = img.unsqueeze(0).to(device)
+        out = net_g(input)
+        out_img = out.detach().squeeze(0).cpu()
+        save_img(out_img, "result/{}".format(image_name))
