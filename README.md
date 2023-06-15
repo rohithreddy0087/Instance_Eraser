@@ -16,4 +16,39 @@ Our method for developing the "Instance Eraser" algorithm involves the following
 
 We experimented with all the mentioned models and the best model which was able to recover background was Pix2pix with ResNet generator. Although we were not able to achieve state of the art results, we were able to recover the background which is contextually relevant. With more experimentation and training we can achieve good results.
 
-## Requirements
+## Prerequisites
+- Linux, Windows or macOS
+- Python 3
+- CPU or NVIDIA GPU + CUDA CuDNN
+
+## Getting Started
+### Installation
+
+- Clone this repo:
+```bash
+git clone https://github.com/rohithreddy0087/Instance_Eraser
+cd Instance_Eraser
+python3 -m venv myenv
+source myenv/bin/activate
+```
+- Install [PyTorch](http://pytorch.org) and 0.4+ and other dependencies (e.g., torchvision, [visdom](https://github.com/facebookresearch/visdom) and [dominate](https://github.com/Knio/dominate)).
+- For pip users, please type the command `pip3 install -r requirements.txt`.
+
+### Generating Datasets
+-  Download the Train2017 and Val2017 of COCO dataset from [COCO Website](https://cocodataset.org/#download)
+-  Change the paths accordinly in `generation/generate_imgs.py` python file and run:
+```bash
+python3 generation/generate_imgs.py
+``` 
+### Training and Testing
+- Change the hyperparameters and dataset path accordingly and run the `train.py` file
+```bash
+python3 generation/train.py
+``` 
+### Executing Streamlit
+```bash
+streamlit run ui_main.py
+```
+Now, in your browser, open http://localhost:8501/
+
+The test images are present in the test_images folder.
