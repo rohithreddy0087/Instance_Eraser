@@ -59,5 +59,5 @@ class BackgroundDataset(Dataset):
             image = self.transform(image.astype(np.float32))
 
             return gen_img, image
-        except:
+        except Exception as err:
             return None

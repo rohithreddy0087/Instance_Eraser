@@ -1,8 +1,8 @@
 from torch.nn import init
 from torch.optim import lr_scheduler
 
-from generator import ResnetGenerator
-from discriminator import NLayerDiscriminator
+from .generator import ResnetGenerator
+from .discriminator import NLayerDiscriminator
 
 def init_weights(net):
     gain=0.02

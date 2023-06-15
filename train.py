@@ -18,7 +18,7 @@ cudnn.benchmark = True
 torch.cuda.manual_seed(123)
 
 class Args:
-    batch_size = 64
+    batch_size = 4
     test_batch_size = 8
     input_channels = 3
     output_channels = 3
@@ -49,7 +49,6 @@ if __name__ == "__main__":
     test_set = get_test_set()
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, collate_fn=collate_fn, batch_size=opt.batch_size, shuffle=True)
     testing_data_loader = DataLoader(dataset=test_set, num_workers=opt.threads, collate_fn=collate_fn, batch_size=opt.test_batch_size, shuffle=False)
-
     print('===> Building models')
     net_g = Generator(opt.input_channels, opt.output_channels, opt.ngf, device)
     net_d = Discriminator(opt.input_channels + opt.output_channels, opt.ndf, device)
@@ -67,7 +66,6 @@ if __name__ == "__main__":
         for iteration, batch in enumerate(training_data_loader, 1):
             real_a, real_b = batch[0].to(device), batch[1].to(device)
             fake_b = net_g(real_a)
-
 
             optimizer_d.zero_grad()
             fake_ab = torch.cat((real_a, fake_b), 1)
