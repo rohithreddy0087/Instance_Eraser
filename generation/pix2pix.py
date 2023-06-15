@@ -19,9 +19,8 @@ def transform_image(image, device):
 def load_pix2pix_model(device, path = "checkpoints/netG_model.pth"):
     opt = Args()
     net_g = Generator(opt.input_channels, opt.output_channels, opt.ngf, device)
-    net_g_wts = torch.load(path)
+    net_g_wts = torch.load(path, map_location=device)
     net_g.load_state_dict(net_g_wts)
-    net_g = torch.load( path, map_location=device)
     return net_g
 
 def get_recovered_image(img, net_g, device):

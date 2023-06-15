@@ -30,16 +30,16 @@ def get_prediction(img, threshold, model, device):
     transform_white = transforms.Compose([transforms.ToTensor()])
     img = transform_white(img).to(device)
     pred = model([img])
-    pred_score = list(pred[0]['scores'].detach().numpy())
+    pred_score = list(pred[0]['scores'].detach().cpu().numpy())
     pred_t = [pred_score.index(x) for x in pred_score if x>threshold][-1]
     masks = (pred[0]['masks']>0.5).squeeze().detach().cpu().numpy()
-    pred_class = [COCO_INSTANCE_CATEGORY_NAMES[i] for i in list(pred[0]['labels'].numpy())]
+    pred_class = [COCO_INSTANCE_CATEGORY_NAMES[i] for i in list(pred[0]['labels'].cpu().numpy())]
     masks = masks[:pred_t+1]
     pred_class = pred_class[:pred_t+1]
     return img, masks, pred_class
 
 def white_out(img, masks, preds, selected_option):
-    img = img.numpy()
+    img = img.detach().cpu().numpy()
     img = np.transpose(img, (1, 2, 0))
     img_copy = img.copy()
     for i, _ in enumerate(range(len(masks))):
