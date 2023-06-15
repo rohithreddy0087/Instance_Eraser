@@ -52,3 +52,8 @@ streamlit run ui_main.py
 Now, in your browser, open http://localhost:8501/
 
 The test images are present in the test_images folder.
+
+## Demo
+A small video demo of the Instance eraser streamlit application
+
+
