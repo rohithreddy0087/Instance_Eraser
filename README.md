@@ -4,7 +4,7 @@ Our project aims to develop an algorithm inspired by Google's MagicEraser featur
 
 ## Project Demo
 A small video demo of the Instance eraser streamlit application.
-
+![Video](test_images/instance_eraser_demo.webm)
 
 ## Method
 ![Flowchart](https://github.com/rohithreddy0087/Instance_Eraser/assets/51110057/897e56da-c10c-48d0-987a-aebb7780467a)
