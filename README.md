@@ -1,6 +1,11 @@
 # Instance Eraser
 Our project aims to develop an algorithm inspired by Google's MagicEraser feature to remove specified objects from images and seamlessly replace them with background elements. We provide a user-friendly interface where users can upload their image and select the object class to remove. The algorithm involves instance segmentation, removing instances of the specified object category, and reconstructing the image by filling the removed areas with appropriate background information. This algorithm addresses the need to remove unwanted objects while preserving the background, benefiting applications such as landscape photography, medical imaging, and satellite imaging.
 
+
+## Project Demo
+A small video demo of the Instance eraser streamlit application.
+
+
 ## Method
 ![Flowchart](https://github.com/rohithreddy0087/Instance_Eraser/assets/51110057/897e56da-c10c-48d0-987a-aebb7780467a)
 Our method for developing the "Instance Eraser" algorithm involves the following steps:
@@ -52,8 +57,3 @@ streamlit run ui_main.py
 Now, in your browser, open http://localhost:8501/
 
 The test images are present in the test_images folder.
-
-## Demo
-A small video demo of the Instance eraser streamlit application
-
-
